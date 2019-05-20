@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>redoc</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Alan Yeung | Analyst | BBV/STI" />
+    <meta name="date" content="2019-05-20" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# redoc
+## Reversible R Markdown/MS Word documents
+### Alan Yeung | Analyst | BBV/STI
+### 20 May 2019
+
+---
+
+
+
+
+# Introduction: The Problem Scenario
+
+- You are working on a collaborative project within a multidisciplinary team.
+
+
+- You have produced analyses in `R` and written up a document using `RMarkdown`.
+
+
+- You choose to output to MS Word and share the document.
+
+--
+
+- A collaborator tells you your work is rubbish and returns the document full of tracked changes and comments.
+
+--
+
+- You need to make revisions but tracked changes and comments cannot be pulled into `RMarkdown`.
+
+---
+
+class: inverse, middle, center
+
+![redoc Tweet](redoc_tweet.png)
+
+
+---
+class: inverse, middle, center
+
+# Example: nps_report_20161216.docx
+
+---
+
+# redoc
+
+- [`redoc`](https://noamross.github.io/redoc) is an experimental package created by Noam Ross to enable a two-way `RMarkdown` ⟷ Microsoft Word workflow.
+
+- **Package is in the very early stages and still buggy. It needs a lot of work** (if interested, you can [contribute](https://github.com/noamross/redoc/blob/master/.github/CONTRIBUTING.md)).
+
+- Uses [lua filters](https://pandoc.org/lua-filters.html) so **needs Pandoc v2 (comes with RStudio 1.2)**
+
+--
+
+Install with
+
+
+```r
+source("https://install-github.me/noamross/redoc")
+```
+
+- Provides new output format: `rdocx_reversible()`.
+
+```yaml
+---
+output:
+  redoc::rdocx_reversible:
+    keep_md: TRUE
+    highlight_outputs: TRUE
+---
+```
+
+--
+
+- Word files created with `redoc` can be reverted back to `.Rmd`, even if they have been edited.
+
+- Tracked changes and comments added using [Critic Markup](http://criticmarkup.com/spec.php#thebasicsyntax).
+
+- **VERY COOL** but quite complex behind the scenes.
+
+---
+# Critic Markup: The 5 Types
+
+--
+
+.pull-left[
+**Addition** 
+
+&lt;font color="green"&gt;`{++ ++}`
+
+`{++added in words appear here++}`&lt;/font&gt;
+
+**Deletion**
+
+&lt;font color="red"&gt;`{-- --}`
+
+`{--deleted words appear here--}`&lt;/font&gt;
+
+**Substitution**
+
+&lt;font color="orange"&gt;`{~~ ~&gt; ~~}`
+
+`{~~sabstatute~&gt;substitute~~}`&lt;/font&gt;
+]
+
+--
+
+.pull-left[
+**Comment**
+
+&lt;font color="blue"&gt;`{&gt;&gt; &lt;&lt;}`
+
+`{&gt;&gt;This is terrible!&lt;&lt;}`&lt;/font&gt;
+
+**Highlight (for comments)**
+
+&lt;font color="purple"&gt;`{== ==}`&lt;/font&gt;&lt;font color="blue"&gt;`{&gt;&gt; &lt;&lt;}`&lt;/font&gt;
+
+&lt;font color="purple"&gt;`{==You said==}`&lt;/font&gt;&lt;font color="blue"&gt;`{&gt;&gt;Like&lt;&lt;}`&lt;/font&gt;
+]
+
+--
+
+.footnote[
+**Formatting changes cannot currently be captured**
+]
+
+---
+class: inverse, middle
+
+&lt;center&gt;
+# DEMO
+&lt;/center&gt;
+
+1. Create `rdocx_reversible()` file&lt;font color="orange"&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/font&gt; using basic `RMarkdown` template.
+2. Insert tracked changes and comments to Word `redoc` file.
+3. Use `undoc()` to retrieve `.Rmd` file in different ways.
+
+.footnote[
+&lt;font color="orange"&gt;[1]&lt;/font&gt; **Buggy**: For some reason, the `.Rmd` needs at least one addition &lt;font color="green"&gt;**{++ ++}**&lt;/font&gt;, one subtraction &lt;font color="red"&gt;**{-- --}**&lt;/font&gt; and one comment &lt;font color="blue"&gt;**{&gt;&gt; &lt;&lt;}**&lt;/font&gt; to knit properly.
+]
+
+---
+# Some Concluding Thoughts
+
+- `redoc` is probably too buggy to use in it's current state.
+
+- Lacks some features, e.g. tools to bring in all changes as critic markup and then review within `RStudio`.
+
+--
+
+- If you do want to use it, couple of strategies that may work reasonably well:
+
+--
+
+- Use tracked changes that are very likely to be **all** accepted (or rejected I suppose!). **OR**
+
+--
+
+- Bring in all changes to the `.Rmd` and use the search function within RStudio to find different types of changes.
+
+
+---
+
+class: center, middle
+
+# **Thanks, Any Questions?**
+
+# Alan Yeung (alan.yeung **at** nhs **dot** net)
+
+.footnote[
+Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
+]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-0.5.9.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

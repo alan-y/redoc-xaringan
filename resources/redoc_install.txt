@@ -1,0 +1,2 @@
+Will not install from within the NSS network
+Can package redoc up as a zip file and install from zip (also needs the 'whoami' package which can be downloaded from CRAN)

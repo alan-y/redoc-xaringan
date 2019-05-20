@@ -1,0 +1,11 @@
+---
+title: "redoc"
+subtitle: "Demo"
+author: "Alan Yeung"
+date: "01 January 2001"
+output:
+  redoc::rdocx_reversible:
+    keep_md: TRUE
+---
+
+{--1--}{++2++}{>>3<<}
