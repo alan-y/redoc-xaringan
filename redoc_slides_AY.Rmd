@@ -39,7 +39,7 @@ options(htmltools.dir.version = FALSE)
 
 class: inverse, middle, center
 
-![redoc Tweet](redoc_tweet.png)
+![redoc Tweet](images/redoc_tweet.png)
 
 
 ---
